@@ -1,0 +1,32 @@
+﻿@model CallCentreFollowUps.Models.FCProjectRequest
+
+@{
+    ViewBag.Title = "Create Request";
+}
+
+<h2>Create Project Request</h2>
+
+@using (Html.BeginForm())
+{
+    <div class="form-group">
+        @Html.LabelFor(model => model.SupervisorID)
+        @Html.DropDownListFor(model => model.SupervisorID, (SelectList)ViewBag.Supervisors, "Please select", new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ProjectID)
+        @Html.DropDownListFor(model => model.ProjectID, (SelectList)ViewBag.Projects, "Please select", new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.NumberOfInterviews)
+        @Html.TextBoxFor(model => model.NumberOfInterviews, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Comments)
+        @Html.TextAreaFor(model => model.Comments, new { @class = "form-control", rows = 4 })
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit Request</button>
+}

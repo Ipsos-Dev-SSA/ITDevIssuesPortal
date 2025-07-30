@@ -1,0 +1,72 @@
+@model IEnumerable<CallCentreFollowUps.Models.Issue>
+
+@{
+    ViewBag.Title = "Issues Presented to Client";
+    Layout = "~/Views/Shared/_LayoutPayroll.cshtml";
+}
+
+<h2 class="mb-3 text-center" style="font-size: 36px; color: #007bff; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; border-bottom: 2px solid #007bff; padding-bottom: 10px;">
+    Issues Presented to Client
+</h2>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+
+<table id="issuesTable" class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Status</th>
+            <th>Submitted By</th>
+            <th>Presented On</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (!Model.Any())
+        {
+            <tr>
+                <td colspan="5" class="text-center">No issues presented to client.</td>
+            </tr>
+        }
+        else
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Title</td>
+                    <td>@(item.Status != null ? item.Status.Name : "No Status")</td>
+                    <td>@item.SubmittedBy</td>
+                    <td>@(item.UpdatedDate.HasValue ? item.UpdatedDate.Value.ToString("yyyy-MM-dd HH:mm") : "N/A")</td>
+                    <td>
+                        <a href="@Url.Action("Details", new { id = item.IssueId })" class="btn btn-sm btn-info">Details</a>
+                        <a href="@Url.Action("Close", new { id = item.IssueId })" class="btn btn-sm btn-danger">Close</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#issuesTable').DataTable({
+                pageLength: 10,
+                lengthChange: false,
+                searching: true,
+                ordering: true,
+                info: false
+            });
+        });
+    </script>
+}

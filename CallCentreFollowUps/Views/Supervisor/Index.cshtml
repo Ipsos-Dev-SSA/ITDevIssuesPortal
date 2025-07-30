@@ -1,0 +1,70 @@
+﻿@model IEnumerable<CallCentreFollowUps.Models.Supervisor>
+
+@{
+    ViewBag.Title = "Supervisors List";
+    Layout = "~/Views/Shared/_LayoutPayroll.cshtml";
+}
+
+<h2 class="mb-3 text-center" style="font-size: 36px; color: #007bff; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; border-bottom: 2px solid #007bff; padding-bottom: 10px;">
+    Manage Supervisors
+</h2>
+
+<div >
+    <a href="@Url.Action("Create")" class="btn btn-success">
+        <i class="fas fa-plus"></i> Create New Supervisor
+    </a>
+</div>
+<br />
+
+<table id="supervisorTable" class="table table-bordered table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>Name</th>
+            <th>Region</th>
+            <th>Active</th>
+            <th>PC Number</th>
+            <th style="width: 150px;">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var supervisor in Model)
+        {
+            <tr>
+                <td>@supervisor.Name</td>
+                <td>@supervisor.Region</td>
+                <td>@(supervisor.IsActive ? "Active" : "Inactive")</td>
+                <td>@supervisor.PCNumber</td>
+                <td>
+                    <a href="@Url.Action("Edit", new { id = supervisor.SupervisorID })" class="btn btn-sm btn-primary">Edit</a>
+                    <a href="@Url.Action("Delete", new { id = supervisor.SupervisorID })"
+                       onclick="return confirm('Are you sure you want to delete this supervisor?');"
+                       class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css" />
+
+    <!-- jQuery & DataTables JS -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#supervisorTable').DataTable({
+                pageLength: 10,
+                lengthChange: true,
+                lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+                searching: true,
+                ordering: true,
+                info: true,
+                responsive: true
+            });
+        });
+    </script>
+}

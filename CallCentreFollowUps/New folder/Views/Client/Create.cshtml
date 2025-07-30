@@ -1,0 +1,60 @@
+@model CallCentreFollowUps.Models.Issue
+
+@{
+    ViewBag.Title = "Create Issue";
+}
+
+<h2>Create Issue</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Title)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(m => m.Description, new { @class = "form-control", rows = 4 })
+                @Html.ValidationMessageFor(m => m.Description)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Priority, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.Priority, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Priority)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.SubmittedBy, "Submitted By", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("SubmittedBy", null, "-- Select User --", new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.SubmittedBy)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.StatusId, "Status", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("StatusId", null, "-- Select Status --", new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.StatusId)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Submit" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+}

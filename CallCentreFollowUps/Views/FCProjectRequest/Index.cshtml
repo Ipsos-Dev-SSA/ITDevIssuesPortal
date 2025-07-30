@@ -1,0 +1,85 @@
+﻿@model IEnumerable<CallCentreFollowUps.Models.IssueHistory>
+
+@{
+    ViewBag.Title = "Issue History Log";
+    Layout = "~/Views/Shared/_LayoutPayroll.cshtml";
+}
+
+<h2 class="mb-3 text-center" style="font-size: 32px; color: #007bff; font-weight: bold; border-bottom: 2px solid #007bff; padding-bottom: 10px;">
+    Top 1,000 Issue History Logs
+</h2>
+
+<div class="mb-3 d-flex justify-content-start">
+    <button id="exportExcel" class="btn btn-info">
+        <i class="fas fa-file-excel"></i> Export to Excel
+    </button>
+</div>
+
+<table id="historyTable" class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>History ID</th>
+            <th>Issue ID</th>
+            <th>Status ID</th>
+            <th>Changed By (UserID)</th>
+            <th>Change Date</th>
+            <th>Comments</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.HistoryId</td>
+                <td>@item.IssueId</td>
+                <td>@item.StatusId</td>
+                <td>@item.ChangedBy</td>
+                <td>@item.ChangeDate.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@item.Comments</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- DataTables & Bootstrap CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css" />
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" />
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+
+<!-- jQuery and DataTables JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+
+<!-- Excel Export Dependency -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var table = $('#historyTable').DataTable({
+            responsive: true,
+            pageLength: 10,
+            lengthChange: false,
+            searching: true,
+            ordering: true,
+            info: true
+        });
+
+        $("#exportExcel").click(function () {
+            // Get full data
+            table.page.len(-1).draw();
+
+            // Clone table without last column if needed
+            var tableClone = $("#historyTable").clone();
+            // tableClone.find("td:last-child, th:last-child").remove(); // Uncomment if you want to exclude action columns
+
+            // Convert to Excel
+            var wb = XLSX.utils.table_to_book(tableClone[0], { sheet: "IssueHistory" });
+            XLSX.writeFile(wb, "IssueHistory.xlsx");
+
+            // Restore pagination
+            table.page.len(10).draw();
+        });
+    });
+</script>

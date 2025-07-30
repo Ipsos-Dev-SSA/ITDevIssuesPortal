@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="a8640538615e4fdeb2281cb38899db2e" Name="Diagram1" ZoomLevel="73">
+        <EntityTypeShape EntityType="MTNIssuesPortalModel.aspnet_Applications" Width="1.5" PointX="0.75" PointY="11.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MTNIssuesPortalModel.aspnet_Membership" Width="1.5" PointX="6" PointY="13.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MTNIssuesPortalModel.aspnet_Paths" Width="1.5" PointX="3" PointY="10.125" IsExpanded="false" />
+        <EntityTypeShape EntityType="MTNIssuesPortalModel.aspnet_PersonalizationAllUsers" Width="1.5" PointX="5.25" PointY="10.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="MTNIssuesPortalModel.aspnet_PersonalizationPerUser" Width="1.5" PointX="5.25" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MTNIssuesPortalModel.aspnet_Profile" Width="1.5" PointX="10.5" PointY="15.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MTNIssuesPortalModel.aspnet_Roles" Width="1.5" PointX="3" PointY="19.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="MTNIssuesPortalModel.aspnet_SchemaVersions" Width="1.5" PointX="7.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MTNIssuesPortalModel.aspnet_WebEvent_Events" Width="1.5" PointX="12.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MTNIssuesPortalModel.Country" Width="1.5" PointX="15.75" PointY="10.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="MTNIssuesPortalModel.FCProjectRequest" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="MTNIssuesPortalModel.FieldCoordinator" Width="1.5" PointX="9.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MTNIssuesPortalModel.InterviewOutcome" Width="1.5" PointX="11.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MTNIssuesPortalModel.lutCheckInLevel" Width="1.5" PointX="20.75" PointY="6" IsExpanded="true" />
+        <EntityTypeShape EntityType="MTNIssuesPortalModel.LutPhase" Width="1.5" PointX="12.25" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="MTNIssuesPortalModel.LutPhaseOutcome" Width="1.5" PointX="10" PointY="5.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MTNIssuesPortalModel.LutPhaseStatu" Width="1.5" PointX="7.75" PointY="2.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MTNIssuesPortalModel.LutScreeningPhase" Width="1.5" PointX="13.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MTNIssuesPortalModel.lutStatu" Width="1.5" PointX="18" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MTNIssuesPortalModel.PaymentDetail" Width="1.5" PointX="5.25" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MTNIssuesPortalModel.PhaseOutcome" Width="1.5" PointX="12.75" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MTNIssuesPortalModel.Project" Width="1.5" PointX="0.75" PointY="1.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MTNIssuesPortalModel.Status" Width="1.5" PointX="8.25" PointY="11.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MTNIssuesPortalModel.Supervisor" Width="1.5" PointX="0.75" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MTNIssuesPortalModel.tblAgentActivity" Width="1.5" PointX="20.25" PointY="9.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="MTNIssuesPortalModel.tblAgent" Width="1.5" PointX="18" PointY="10" IsExpanded="true" />
+        <EntityTypeShape EntityType="MTNIssuesPortalModel.tblRespondent" Width="1.5" PointX="23" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="MTNIssuesPortalModel.tblStaging" Width="1.5" PointX="2.75" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MTNIssuesPortalModel.vw_aspnet_Roles" Width="1.5" PointX="14.75" PointY="3.75" IsExpanded="true" />
+        <AssociationConnector Association="MTNIssuesPortalModel.FK__aspnet_Me__Appli__3A81B327" ManuallyRouted="false" />
+        <AssociationConnector Association="MTNIssuesPortalModel.FK__aspnet_Pa__Appli__6C190EBB" ManuallyRouted="false" />
+        <AssociationConnector Association="MTNIssuesPortalModel.FK__aspnet_Ro__Appli__59063A47" ManuallyRouted="false" />
+        <AssociationConnector Association="MTNIssuesPortalModel.FK__aspnet_Pe__PathI__71D1E811" ManuallyRouted="false" />
+        <AssociationConnector Association="MTNIssuesPortalModel.FK__aspnet_Pe__PathI__75A278F5" ManuallyRouted="false" />
+        <AssociationConnector Association="MTNIssuesPortalModel.FK_tblAgents_Country" ManuallyRouted="false" />
+        <AssociationConnector Association="MTNIssuesPortalModel.FK_tblRespondent_Country" ManuallyRouted="false" />
+        <AssociationConnector Association="MTNIssuesPortalModel.FK__FCProject__Proje__32CB82C6" ManuallyRouted="false" />
+        <AssociationConnector Association="MTNIssuesPortalModel.FK__PaymentDe__Reque__38845C1C" ManuallyRouted="false" />
+        <AssociationConnector Association="MTNIssuesPortalModel.FK_Employee_Supervisor" ManuallyRouted="false" />
+        <AssociationConnector Association="MTNIssuesPortalModel.FK_lutCheckInLevel_lutCheckInLevel" ManuallyRouted="false" />
+        <AssociationConnector Association="MTNIssuesPortalModel.FK_tblRespondent_lutCheckInLevel" ManuallyRouted="false" />
+        <AssociationConnector Association="MTNIssuesPortalModel.FK__LutPhase__PhaseO__46136164" ManuallyRouted="false" />
+        <AssociationConnector Association="MTNIssuesPortalModel.FK__LutPhase__PhaseS__451F3D2B" ManuallyRouted="false" />
+        <AssociationConnector Association="MTNIssuesPortalModel.FK__LutPhaseO__Phase__36D11DD4" ManuallyRouted="false" />
+        <AssociationConnector Association="MTNIssuesPortalModel.FK_tblAgentActivity_lutStatus" ManuallyRouted="false" />
+        <AssociationConnector Association="MTNIssuesPortalModel.FK_tblRespondent_lutStatus" ManuallyRouted="false" />
+        <AssociationConnector Association="MTNIssuesPortalModel.FK_tblAgentActivity_tblAgents" ManuallyRouted="false" />
+        <AssociationConnector Association="MTNIssuesPortalModel.FK_tblAgentActivity_tblRespondent" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="MTNIssuesPortalModel.vw_aspnet_UsersInRoles" Width="1.5" PointX="16.375" PointY="0.75" />
+        <EntityTypeShape EntityType="MTNIssuesPortalModel.vw_aspnet_Users" Width="1.5" PointX="16.375" PointY="13.75" />
+        <EntityTypeShape EntityType="MTNIssuesPortalModel.Team" Width="1.5" PointX="3.75" PointY="22.75" />
+        <EntityTypeShape EntityType="MTNIssuesPortalModel.IssueCategory" Width="1.5" PointX="8.25" PointY="20.25" />
+        <EntityTypeShape EntityType="MTNIssuesPortalModel.tblEFSUser" Width="1.5" PointX="16.375" PointY="17.75" />
+        <EntityTypeShape EntityType="MTNIssuesPortalModel.lutEfsCountry" Width="1.5" PointX="17.375" PointY="3.75" />
+        <EntityTypeShape EntityType="MTNIssuesPortalModel.Issue" Width="1.5" PointX="10.5" PointY="18.625" />
+        <AssociationConnector Association="MTNIssuesPortalModel.FK_Issues_Roles" />
+        <AssociationConnector Association="MTNIssuesPortalModel.FK_Issues_IssueCategory" />
+        <AssociationConnector Association="MTNIssuesPortalModel.FK_Issues_Status" />
+        <AssociationConnector Association="MTNIssuesPortalModel.FK_Issues_Team" />
+        <EntityTypeShape EntityType="MTNIssuesPortalModel.IssueHistory" Width="1.5" PointX="12.75" PointY="16.5" />
+        <AssociationConnector Association="MTNIssuesPortalModel.FK_IssueHistory_Issue" />
+        <AssociationConnector Association="MTNIssuesPortalModel.FK_IssueHistory_Status" />
+        <EntityTypeShape EntityType="MTNIssuesPortalModel.aspnet_Users" Width="1.5" PointX="6" PointY="20.125" />
+        <AssociationConnector Association="MTNIssuesPortalModel.FK__aspnet_Us__Appli__2A4B4B5E" />
+        <AssociationConnector Association="MTNIssuesPortalModel.FK__aspnet_Me__UserI__3B75D760" />
+        <AssociationConnector Association="MTNIssuesPortalModel.FK__aspnet_Pe__UserI__76969D2E" />
+        <AssociationConnector Association="MTNIssuesPortalModel.FK__aspnet_Pr__UserI__4F7CD00D" />
+        <AssociationConnector Association="MTNIssuesPortalModel.FK_aspnet_Users_Team" />
+        <AssociationConnector Association="MTNIssuesPortalModel.FK_Issues_AssignedTo" />
+        <AssociationConnector Association="MTNIssuesPortalModel.aspnet_UsersInRoles" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

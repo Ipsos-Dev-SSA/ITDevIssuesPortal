@@ -1,0 +1,18 @@
+﻿@model CallCentreFollowUps.Models.Supervisor
+
+@{
+    ViewBag.Title = "Delete Supervisor";
+}
+
+<h2>Are you sure you want to delete this supervisor?</h2>
+
+@*<div>
+    <h3>@Model.Name</h3>
+</div>*@
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-danger">Delete</button>
+    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-secondary" })
+}

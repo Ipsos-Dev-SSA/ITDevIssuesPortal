@@ -1,0 +1,99 @@
+﻿@model CallCentreFollowUps.Models.RespModel
+
+@{
+        ViewBag.Title = "Index";
+Layout = "~/Views/Shared/_LayoutPayroll.cshtml"; <!-- Reference the layout file here -->
+
+}
+
+<style>
+    .container {
+        background: rgba(255, 255, 255, 0.98);
+        border-radius: 10px;
+        padding: 30px;
+        margin-top: 40px;
+    }
+
+    .portal-image {
+        display: block;
+        max-width: 100%;
+        max-height: 360px; /* 👈 Limit height here */
+        height: auto;
+        margin: 20px auto;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        object-fit: contain;
+    }
+
+    h2, .lead {
+        color: #003366;
+        text-align: center;
+        text-shadow: 1px 1px 2px #ffffff;
+    }
+</style>
+<!DOCTYPE html>
+
+<html>
+<head>
+
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+    <script src="https://cdn.datatables.net/1.10.8/js/jquery.dataTables.min.js" defer="defer"></script>
+    <link href="~/Content/datatables.min.css" />
+    <script src="~/Scripts/datatables.min.js"></script>
+    <link href="~/Content/Site.css" />
+    <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            var table = $('#ResponsentTable').DataTable({
+                'responsive': true
+            });
+
+        });
+
+        $(function () {
+            $("#ResponsentTable .details").click(function () {
+                var RespondentID = $(this).closest("tr").find("td").eq(0).html();
+                $.ajax({
+                    type: "POST",
+                    url: "/CallCentreTracker/Home/ViewRespondent",
+                    data: '{RespondentID: "' + RespondentID + '" }',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "html",
+                    success: function (response) {
+                        $("#partialModal").find(".modal-body").html(response);
+                        $("#partialModal").modal('show');
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            });
+        });
+
+    </script>
+</head>
+
+<body>
+
+    <div class="container mt-5">
+        <div class="alert alert-danger text-center" role="alert" style="font-size: 24px; font-weight: bold;">
+            You do not have access to this Dashboard. Please select a different dashboard that matches your role.
+
+            <img src="~/Content/Images/IssuesLog.png" alt="Change Management Banner" class="portal-image" />
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,86 @@
+﻿@model CallCentreFollowUps.Models.NewUserModel
+
+@{
+    ViewBag.Title = "Edit User";
+}
+
+<h2 class="custom-heading">Edit User</h2>
+
+@using (Html.BeginForm("Edit", "User", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    
+
+    <div class="row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(model => model.FirstName)
+            @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(model => model.LastName)
+            @Html.TextBoxFor(model => model.LastName, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(model => model.Password)
+            @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(model => model.RoleName)
+            @Html.DropDownList("RoleName", ViewBag.Roles as List<SelectListItem>, "Select a Role", new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.RoleName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(model => model.EmailAddress)
+            @Html.TextBoxFor(model => model.EmailAddress, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.EmailAddress, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(model => model.CountryID, "Region")
+            @Html.DropDownList("CountryID", ViewBag.Countries as List<SelectListItem>, "Select a Region", new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.CountryID, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-secondary" })
+        </div>
+
+        <div class="form-group col-md-6">
+
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    </div>
+}
+
+<style>
+    .custom-heading {
+        font-size: 2.5rem;
+        color: #004085;
+        text-align: center;
+        font-weight: bold;
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-radius: 5px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

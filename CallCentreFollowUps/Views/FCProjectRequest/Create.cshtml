@@ -1,0 +1,96 @@
+﻿@model CallCentreFollowUps.Models.FCProjectRequest
+
+@{
+    ViewBag.Title = "Create Project Request";
+}
+
+<h2 class="custom-heading">Create Project Request</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <!-- Two columns for Supervisor and Project -->
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(model => model.SupervisorID,"Supervisor Name")
+            @Html.DropDownListFor(model => model.SupervisorID, ViewBag.Supervisors as SelectList, "-- Select Supervisor --", new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.SupervisorID)
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(model => model.ProjectID,"Project Name")
+            @Html.DropDownListFor(model => model.ProjectID, (SelectList)ViewBag.Projects, "Select Project", new { @class = "form-control", id = "ProjectID" })
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+
+            @Html.LabelFor(model => model.NumberOfInterviews,"Number of Interviews")
+            @Html.TextBoxFor(model => model.NumberOfInterviews, new { @class = "form-control" })
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(model => model.DateRequested,"Date Requested")
+            @Html.TextBoxFor(model => model.DateRequested, new { @class = "form-control", type = "date" })
+        </div>
+        <!-- Change Comments field to TextArea -->
+
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+
+            @Html.LabelFor(model => model.Comments)
+            @Html.TextAreaFor(model => model.Comments, new { @class = "form-control", rows = 6 })
+        </div>
+
+    </div>
+
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <button type="submit" class="btn btn-primary">Create</button>
+        </div>
+        <div class="form-group col-md-6">
+
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+
+     </div>
+ 
+
+        }
+
+
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('#ProjectID').change(function () {
+                    var selectedOption = $(this).find(':selected'); // Get the selected option
+                    var projectNumber = selectedOption.closest('optgroup').attr('label'); // Get ProjectNumber from optgroup label
+
+                    if (projectNumber) {
+                        $('#ProjectNumber').val(projectNumber);
+                    } else {
+                        $('#ProjectNumber').val(""); // Clear if no project is selected
+                    }
+                });
+            });
+        </script>
+        <style>
+            /* Add this in your custom CSS file or within a <style> tag */
+            .custom-heading {
+                font-size: 2.5rem; /* Larger font size */
+                color: #004085; /* Custom blue color */
+                text-align: center; /* Center alignment */
+                font-weight: bold; /* Make the text bold */
+                padding: 15px; /* Add padding for spacing */
+                background-color: #f8f9fa; /* Light background color */
+                border-radius: 5px; /* Rounded corners */
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+            }
+        </style>

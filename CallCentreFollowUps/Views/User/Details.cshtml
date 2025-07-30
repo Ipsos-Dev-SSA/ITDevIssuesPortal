@@ -1,0 +1,54 @@
+﻿@model CallCentreFollowUps.Models.NewUserModel
+
+@{
+    ViewBag.Title = "User Details";
+}
+
+<h2 class="custom-heading">User Details</h2>
+
+<div class="row mt-4">
+    <div class="form-group col-md-6">
+        <label>First Name</label>
+        <p class="form-control-static">@Model.FirstName</p>
+    </div>
+    <div class="form-group col-md-6">
+        <label>Last Name</label>
+        <p class="form-control-static">@Model.LastName</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="form-group col-md-6">
+        <label>Email Address</label>
+        <p class="form-control-static">@Model.EmailAddress</p>
+    </div>
+    <div class="form-group col-md-6">
+        <label>Region</label>
+        <p class="form-control-static">@ViewBag.CountryName</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="form-group col-md-6">
+        <label>Role</label>
+        <p class="form-control-static">@Model.RoleName</p>
+    </div>
+</div>
+
+<div class="form-group mt-4">
+    
+    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-secondary ml-2" })
+</div>
+
+<style>
+    .custom-heading {
+        font-size: 2.5rem;
+        color: #004085;
+        text-align: center;
+        font-weight: bold;
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-radius: 5px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+</style>

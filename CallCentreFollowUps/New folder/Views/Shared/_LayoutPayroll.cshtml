@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MTN Issues Portal</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+
+    <!-- DataTables -->
+    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+
+    <!-- Local Styles (excluding Bootstrap 4 to prevent conflict) -->
+    <link href="~/Content/css/theme.css" rel="stylesheet" />
+    <link href="~/Content/css/font-face.css" rel="stylesheet" />
+    <link href="~/Content/vendor/font-awesome-5/css/fontawesome-all.min.css" rel="stylesheet" />
+    <link href="~/Content/vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" />
+    <link href="~/Content/vendor/animsition/animsition.min.css" rel="stylesheet" />
+    <link href="~/Content/vendor/wow/animate.css" rel="stylesheet" />
+    <link href="~/Content/vendor/css-hamburgers/hamburgers.min.css" rel="stylesheet" />
+    <link href="~/Content/vendor/slick/slick.css" rel="stylesheet" />
+    <link href="~/Content/vendor/select2/select2.min.css" rel="stylesheet" />
+    <link href="~/Content/vendor/perfect-scrollbar/perfect-scrollbar.css" rel="stylesheet" />
+
+    <style>
+        .sidebar {
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding-top: 80px;
+            border-right: 2px solid #ddd;
+        }
+
+        .nav-link {
+            font-size: 1.1rem;
+            padding: 10px;
+        }
+
+            .nav-link i {
+                margin-right: 8px;
+            }
+
+        main {
+            margin-left: 250px;
+            padding: 20px;
+        }
+
+        .hover-effect:hover {
+            background-color: #f1f1f1;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <!-- Header -->
+        <header class="header-desktop3 d-none d-lg-block">
+            <div class="section__content section__content--p35">
+                <div class="header3-wrap d-flex justify-content-between align-items-center">
+                    <div class="header__logo">
+                        <a href="#">
+                            <img src="~/Content/images/icon/IpsosSDR.png" alt="SDR" />
+                        </a>
+                    </div>
+                    <div class="header__tool">
+                        <div class="account-wrap">
+                            <div class="account-item account-item--style2 clearfix js-item-menu d-flex align-items-center">
+                                <div class="image me-2">
+                                    <img src="~/Content/images/icon/UserImage.png" alt="user name" />
+                                </div>
+                                <div class="content me-3">
+                                    <a class="js-acc-btn" href="#">
+                                        Welcome <b>@HttpContext.Current.User.Identity.Name</b>
+                                    </a>
+                                </div>
+                                <div class="account-dropdown js-dropdown">
+                                    <div class="info clearfix d-flex align-items-center mb-2">
+                                        <div class="image me-2">
+                                            <a href="#">
+                                                <img src="~/Content/images/icon/UserImage.png" alt="user name" />
+                                            </a>
+                                        </div>
+                                        <div class="content">
+                                            <h5 class="name mb-0">
+                                                <a href="#"><b>@HttpContext.Current.User.Identity.Name</b></a>
+                                            </h5>
+                                            <span class="email"><b>@HttpContext.Current.User.Identity.Name</b></span>
+                                        </div>
+                                    </div>
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                                        <a href="@Url.Action("UpdatePassword", "User")" class="btn btn-success ">
+                                            <i class="fas fa-edit"></i> Update Password
+                                        </a>
+                                        <a href="@Url.Action("Login", "Home")" class="btn btn-danger">
+                                            <i class="fas fa-sign-out-alt"></i> Logout
+                                        </a>
+                                    }
+                                    <input type="hidden" id="UserFullName" class="iHidden" name="UserFullName" value='@ViewBag.CurrentUserName' />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Sidebar + Main -->
+        <div class="row">
+            <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+                <div class="position-sticky mt-5">
+                    <a class="nav-link d-flex align-items-center gap-2 px-3 py-2 rounded shadow-sm bg-white hover-effect" href="@Url.Action("LandingPage", "Home")" style="font-weight: 500; color: #333;">
+                        <i class="fa-solid fa-house fa-lg text-primary"></i>
+                        <span>Navigate to Dashboard</span>
+                    </a>
+                    @if (ViewBag.RoleName == "Supervisor Role")
+                    {
+                        <div class="mt-4">
+                            
+                            <ul class="nav flex-column px-2">
+                                <li class="nav-item"><a class="nav-link" href="@Url.Action("Index", "User")">👥 Manage Users</a></li>
+                                <li class="nav-item"><a class="nav-link" href="@Url.Action("GetTopIssueHistories", "Issues")">📝 Issues History</a></li>
+                                @*<li class="nav-item"><a class="nav-link" href="@Url.Action("Index", "Issues")">👥 Manage Interviewers</a></li>
+        <li class="nav-item"><a class="nav-link" href="@Url.Action("AssignTasks", "Supervisor")">📝 Assign Tasks</a></li>
+        <li class="nav-item"><a class="nav-link" href="@Url.Action("FieldReports", "Supervisor")">📍 Field Reports</a></li>
+        <li class="nav-item"><a class="nav-link" href="@Url.Action("TeamPerformance", "Supervisor")">📈 Performance</a></li>*@
+                            </ul>
+                        </div>
+                    }
+                </div>
+            </nav>
+
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- DataTables JS for Bootstrap 5 -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <!-- Vendor JS (non-Bootstrap) -->
+    <script src="~/Content/vendor/slick/slick.min.js"></script>
+    <script src="~/Content/vendor/wow/wow.min.js"></script>
+    <script src="~/Content/vendor/animsition/animsition.min.js"></script>
+    <script src="~/Content/vendor/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="~/Content/vendor/chartjs/Chart.bundle.min.js"></script>
+    <script src="~/Content/vendor/select2/select2.min.js"></script>
+    <!-- Main JS -->
+    <script src="~/Scripts/js/main.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

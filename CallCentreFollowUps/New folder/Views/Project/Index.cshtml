@@ -1,0 +1,68 @@
+﻿@model IEnumerable<CallCentreFollowUps.Models.Project>
+
+@{
+    ViewBag.Title = "Projects";
+}
+@{
+    Layout = "~/Views/Shared/_LayoutPayroll.cshtml"; <!-- Reference the layout file here -->
+}
+
+<h2 class="mb-3 text-center" style="font-size: 36px; color: #007bff; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; border-bottom: 2px solid #007bff; padding-bottom: 10px;">Manage Projects</h2>
+
+
+<a href="@Url.Action("Create")" class="btn btn-success mb-3">
+    <i class="fas fa-plus"></i> Create New Project
+</a>
+
+<table id="usersTable" class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Supervisor Name</th>
+            <th>Project Number</th>
+
+            <th>Pay Rate</th>
+
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var project in Model)
+        {
+            <tr>
+
+                <td>@project.ProjectName</td>
+                <td>@project.ProjectNumber</td>
+
+                <td>@project.PayRate</td>
+
+
+                <td>
+
+                    <a href="@Url.Action("Edit", new { id = project.ProjectID })" class="btn btn-sm btn-primary">Edit</a>
+                    <a href="@Url.Action("Delete", new { id = project.ProjectID })" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#usersTable').DataTable({
+                pageLength: 10,
+                lengthChange: false,
+                searching: true,
+                ordering: true,
+                info: false
+            });
+        });
+    </script>
+}
+

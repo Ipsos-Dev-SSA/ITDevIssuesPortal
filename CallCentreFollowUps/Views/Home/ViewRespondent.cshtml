@@ -1,0 +1,692 @@
+﻿@model CallCentreFollowUps.Models.RespDataBase
+
+@{
+    ViewBag.Title = "Respondent";
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+    <script src="https://cdn.datatables.net/1.10.8/js/jquery.dataTables.min.js" defer="defer"></script>
+    <link href="~/Content/datatables.min.css" />
+    <script src="~/Scripts/datatables.min.js"></script>
+    <link href="~/Content/Site.css" />
+    <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            var table = $('#ResponsentTable').DataTable({
+                'responsive': true
+            });
+
+        });
+
+        $(function () {
+            $("#ResponsentTable .details").click(function () {
+                var RespondentID = $(this).closest("tr").find("td").eq(0).html();
+                $.ajax({
+                    type: "POST",
+                    url: "/CallCentreFollowUps/Home/ViewRespondent",
+                    data: '{RespondentID: "' + RespondentID + '" }',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "html",
+                    success: function (response) {
+                        $("#partialModal").find(".modal-body").html(response);
+                        $("#partialModal").modal('show');
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            });
+        });
+
+    </script>
+</head>
+
+<body>
+
+    <div>
+        <p><strong>InterviewID: @Model.Resp_Surname</strong></p>
+    </div>
+
+
+    <br />
+
+
+    <div class="row">
+
+
+        @if (ViewBag.role == "SupervisorRole")
+        {
+            <div class="col-md-6">
+
+                @if (ViewBag.role == "SupervisorRole")
+                {
+                    using (Html.BeginForm("AssignAgent", "Home", FormMethod.Post))
+                    {
+                        @Html.HiddenFor(m => m.RespondentID, new { @name = "respondentId" })
+
+
+                        <div class="card">
+                            <div class="card-header">
+                                <strong>Assign Agent</strong>
+                            </div>
+                            <div class="form-group">
+                                <label for="ddlAgent" class=" form-control-label">Agents</label>
+                                <select name="ddlAgent" class="form-control">
+                                    <option value="">Select Agent</option>
+                                    @foreach (var item in ViewBag.agents)
+                                    {
+                                        <option value="@item.AgentID">@item.Name</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="comment" class=" form-control-label">Comment</label>
+                                <textarea class="form-control" rows="5" name="comment" placeholder="Write comments here!"></textarea>
+                            </div>
+
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary btn-sm">
+                                    <i class="fa fa-dot-circle-o"></i> Assign
+                                </button>
+                                <p class="@ViewBag.alert">@ViewBag.message</p>
+
+                            </div>
+
+                            <br />
+
+
+                        </div>
+                    }
+
+                }
+            </div>
+
+        }
+
+
+        @if (Model.CheckInLevel != "Call Attempts Completed" && Convert.ToInt32(Model.StatusID) != 2)
+        {
+            using (Html.BeginForm("UpdateCallAttemptActivity", "Home", FormMethod.Post, new { id = "callAttemptForm" }))
+            {
+                @Html.HiddenFor(m => m.RespondentID, new { @name = "respondentId" })
+                @Html.Hidden("checkinLevel", Model.CheckInLevel)
+
+                <div class="card">
+                    <div class="card p-3 border">
+                        <div class="card-header bg-warning text-white d-flex justify-content-between align-items-center">
+                            <strong>Call Attempt Activity</strong>
+                            <a href="#" class="text-white">
+                                <i class="fas fa-edit"></i> <!-- Edit icon -->
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <p class="mb-0"><strong>Call Attempt Stage:</strong> @Model.CheckInLevel</p>
+                        </div>
+                    </div>
+
+                    <div class="card-header">
+                        <strong>Call Attempt Activity</strong>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label class="form-control-label">Status</label>
+                            @Html.DropDownList("ddlStatus",
+                                ViewBag.status as SelectList ?? new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"),
+                                "-- Select Status --",
+                                new { @class = "form-control", id = "ddlStatus", onchange = "toggleSubmitButton()" })
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-control-label">Contacts</label>
+                            <input type="text" class="form-control" name="contact" placeholder="Enter last dialed No" />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-control-label">Comment</label>
+                            <textarea class="form-control" rows="5" name="comment" placeholder="Write comments here!"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary btn-sm" id="submitButton" disabled>
+                            <i class="fa fa-dot-circle-o"></i> Submit
+                        </button>
+                    </div>
+                    <a href="@Url.Action("Index", "Home")" class="btn btn-secondary mb-3">Back to Home</a>
+                </div>
+                <input type="hidden" id="CheckIn1Date" name="CheckIn1Date">
+                <script>
+                    document.getElementById("CheckIn1Date").value = new Date().toISOString();
+                </script>
+            }
+        }
+        @if (Model.CheckInLevel == "Call Attempts Completed")
+        {
+            <div style="border: 2px solid #28a745; background-color: #d4edda; color: #155724; padding: 5px; border-radius: 5px; display: flex; align-items: center; gap: 10px;">
+                ✅ <strong>Call Attempts Completed</strong>
+            </div>
+        }
+        @if (Convert.ToInt32(Model.StatusID) == 2 && (Model.CheckInLevel != "Call Attempts Completed"))
+        {
+            <div style="border: 2px solid #dc3545; background-color: #f8d7da; color: #721c24; padding: 5px; border-radius: 5px; display: flex; align-items: center; gap: 10px;">
+                ❌ <strong>Call Denied</strong>
+            </div>
+        }
+
+
+        <script>
+            function toggleSubmitButton() {
+                var statusDropdown = document.getElementById("ddlStatus");
+                var submitButton = document.getElementById("submitButton");
+
+                // Log the selected value to ensure it's actually "New"
+                console.log("Selected Value:", statusDropdown.value);
+
+                // Strict comparison for "New"
+                if (statusDropdown.value === "" || statusDropdown.value === "-- Select Status --" || statusDropdown.value === "New") {
+                    submitButton.disabled = true;
+                } else {
+                    submitButton.disabled = false;
+                }
+            }
+
+            // Ensure submit button is disabled on page load
+            document.addEventListener("DOMContentLoaded", function () {
+                toggleSubmitButton();
+            });
+        </script>
+
+
+        @if (Model.VisitLevel != "Physical Visits Completed" && Model.CheckInLevel == "Call Attempts Completed" && Convert.ToInt32(Model.StatusID) != 2)
+        {
+            using (Html.BeginForm("UpdatePhysicalAttemptActivity", "Home", FormMethod.Post, new { id = "physicalAttemptForm" }))
+            {
+                @Html.HiddenFor(m => m.RespondentID, new { @name = "respondentId" })
+                @Html.Hidden("VisitLevel", Model.VisitLevel)
+
+                <div class="card">
+                    <div class="card p-3 border">
+                        <div class="card-header bg-warning text-white d-flex justify-content-between align-items-center">
+                            <strong>Physical Attempt Activity</strong>
+                            <a href="#" class="text-white">
+                                <i class="fas fa-edit"></i> <!-- Edit icon -->
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <p class="mb-0"><strong>Physical Visit Stage:</strong> @Model.VisitLevel</p>
+                        </div>
+                    </div>
+
+                    <div class="modal-body">
+                        @*<div class="form-group">
+                                <label class="form-control-label">Date Added</label>
+                                <p class="form-control-plaintext">@Model.DateAdded</p>
+                            </div>*@
+
+                        <div class="form-group">
+                            <label class="form-control-label">Status</label>
+                            @Html.DropDownList("ddlStatus",
+                                ViewBag.status as SelectList ?? new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"),
+                                "-- Select Status --",
+                                new { @class = "form-control", id = "ddlStatus", onchange = "togglePhysicalSubmitButton()" })
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-control-label">Contacts</label>
+                            <input type="text" class="form-control" name="contact" placeholder="Enter last dialed No" />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-control-label">Comment</label>
+                            <textarea class="form-control" rows="5" name="comment" placeholder="Write comments here!"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary btn-sm" id="physicalSubmitButton" disabled>
+                            <i class="fa fa-dot-circle-o"></i> Submit
+                        </button>
+                    </div>
+                    <a href="@Url.Action("Index", "Home")" class="btn btn-secondary mb-3">Back to Home</a>
+                </div>
+            }
+        }
+        else if (Model.VisitLevel == "Physical Visits Completed")
+        {
+            <div style="border: 2px solid #28a745; background-color: #d4edda; color: #155724; padding: 10px; border-radius: 5px; display: flex; align-items: center; gap: 10px;">
+                ✅ <strong>Visit Phase Completed</strong>
+            </div>
+        }
+        @if (Convert.ToInt32(Model.StatusID) == 2 && (Model.CheckInLevel == "Call Attempts Completed"))
+        {
+            <div style="border: 2px solid #dc3545; background-color: #f8d7da; color: #721c24; padding: 5px; border-radius: 5px; display: flex; align-items: center; gap: 10px;">
+                ❌ <strong>Visit Denied</strong>
+            </div>
+        }
+
+        <script>
+            function togglePhysicalSubmitButton() {
+                var statusDropdown = document.getElementById("ddlStatus");
+                var submitButton = document.getElementById("physicalSubmitButton");
+
+                // Log the selected value to ensure it's actually "New"
+                console.log("Selected Value:", statusDropdown.value);
+
+                // Strict comparison for "New"
+                if (statusDropdown.value === "" || statusDropdown.value === "-- Select Status --" || statusDropdown.value === "New") {
+                    submitButton.disabled = true;
+                } else {
+                    submitButton.disabled = false;
+                }
+            }
+
+            // Ensure submit button is disabled on page load
+            document.addEventListener("DOMContentLoaded", function () {
+                togglePhysicalSubmitButton();
+            });
+        </script>
+
+
+        @if (Model.ScreeningLevel != "Screening Phase Completed" && Model.VisitLevel == "Physical Visits Completed" && Model.CheckInLevel == "Call Attempts Completed")
+        {
+            using (Html.BeginForm("UpdateScreeningPhase", "Home", FormMethod.Post))
+            {
+                @Html.HiddenFor(m => m.RespondentID, new { @name = "respondentId" })
+
+                <div class="card">
+                    <div class="card p-3 border">
+                        <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center">
+                            <strong>Update Screening Phase</strong>
+                            <a href="#" class="text-white">
+                                <i class="fas fa-edit"></i> <!-- Edit icon -->
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <p class="mb-0"><strong>Screening Phase:</strong> @Model.ScreeningLevel</p>
+                            <p class="mb-0"><strong>Screening Status:</strong> @ViewBag.PhaseStatus</p>
+                        </div>
+                    </div>
+
+                    <div class="modal-body">
+                        @*<div class="form-group">
+                                <label class="form-control-label">Date Added</label>
+                                <p class="form-control-plaintext">@Model.DateAdded</p>
+                            </div>*@
+
+                        @Html.Hidden("ScreeningID")
+
+                        <div class="form-group">
+                            <label for="phaseStatus">Phase Status:</label>
+                            <select id="phaseStatus" name="phaseStatus" class="form-control">
+                                <option value="">-- Select Status --</option>
+                                @if (ViewBag.PhaseStatusList != null)
+                                {
+                                    foreach (var item in ViewBag.PhaseStatusList as List<SelectListItem>)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phaseOutcome">Phase Outcome:</label>
+                            <select id="phaseOutcome" name="PhaseOutcome" class="form-control">
+                                <option value="">-- Select Outcome --</option>
+                            </select>
+                        </div>
+
+                        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                        <script>
+                    $(document).ready(function () {
+                        // Handle change of Phase Status dropdown
+                        $("#phaseStatus").change(function () {
+                            var selectedPhaseStatusId = $(this).val();
+                            $("input[name='ScreeningID']").val(selectedPhaseStatusId);
+
+                            if (selectedPhaseStatusId) {
+                                $.ajax({
+                                    url: '@Url.Action("GetPhaseOutcomes", "Home")',
+                                    type: "GET",
+                                    data: { phaseStatusId: selectedPhaseStatusId },
+                                    success: function (data) {
+                                        var outcomeDropdown = $("#phaseOutcome");
+                                        outcomeDropdown.empty();
+                                        outcomeDropdown.append('<option value="">-- Select Outcome --</option>');
+
+                                        $.each(data, function (index, item) {
+                                            outcomeDropdown.append($('<option>', {
+                                                value: item.Id,
+                                                text: item.Description
+                                            }));
+                                        });
+                                    },
+                                    error: function (xhr, status, error) {
+                                        console.error("AJAX Error:", error);
+                                    }
+                                });
+                            } else {
+                                $("#phaseOutcome").empty().append('<option value="">-- Select Outcome --</option>');
+                            }
+                        });
+
+                        // Handle form submission
+                        $("form").submit(function (e) {
+                            // Check if both Phase Status and Phase Outcome are selected
+                            var phaseStatus = $("#phaseStatus").val();
+                            var phaseOutcome = $("#phaseOutcome").val();
+
+                            if (!phaseStatus || !phaseOutcome) {
+                                e.preventDefault(); // Prevent form submission
+                                alert("Please select both Phase Status and Phase Outcome.");
+                            }
+                        });
+                    });
+                        </script>
+
+                        <div class="form-group">
+                            <label class="form-control-label">Comment</label>
+                            <textarea class="form-control" rows="5" name="comment" placeholder="Write comments here!"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary btn-sm">
+                            <i class="fa fa-dot-circle-o"></i> Submit
+                        </button>
+                    </div>
+                    <a href="@Url.Action("Index", "Home")" class="btn btn-secondary mb-3">Back to Home</a>
+                </div>
+            }
+        }
+        else if (Model.ScreeningLevel == "Screening Phase Completed")
+        {
+            <div style="border: 2px solid #28a745; background-color: #d4edda; color: #155724; padding: 10px; border-radius: 5px; display: flex; align-items: center; gap: 10px;">
+                ✅ <strong>Screening Phase Completed</strong>
+            </div>
+        }
+
+        @if (Model.InterviewerLevel != "Interview Phase Completed" && Model.ScreeningLevel == "Screening Phase Completed" && Model.VisitLevel == "Physical Visits Completed" && Model.CheckInLevel == "Call Attempts Completed")
+        {
+            using (Html.BeginForm("UpdateInterviewPhase", "Home", FormMethod.Post, new { id = "updateInterviewForm" }))
+            {
+                @Html.HiddenFor(m => m.RespondentID, new { @name = "respondentId" })
+
+                <div class="card">
+                    <div class="card p-3 border">
+                        <div class="card-header bg-warning text-white d-flex justify-content-between align-items-center">
+                            <strong>Update Interview Phase</strong>
+                            <a href="#" class="text-white">
+                                <i class="fas fa-edit"></i> <!-- Edit icon -->
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <p class="mb-0"><strong>Interview Phase:</strong> @Model.InterviewerLevel</p>
+                            <p class="mb-0"><strong>Interview Status:</strong> @ViewBag.InterviewStatuss</p>
+                        </div>
+                    </div>
+
+                    <div class="modal-body">
+                        @*<div class="form-group">
+                                <label class="form-control-label">Date Added</label>
+                                <p class="form-control-plaintext">@Model.DateAdded</p>
+                            </div>*@
+
+                        @Html.Hidden("InterviewID")
+
+                        <div class="form-group">
+                            <label for="phaseStatus">Phase Status:</label>
+                            <select id="interviewStatus" name="interviewStatus" class="form-control">
+                                <option value="">-- Select Status --</option>
+                                @if (ViewBag.PhaseStatusListInterview != null)
+                                {
+                                    foreach (var item in ViewBag.PhaseStatusListInterview as List<SelectListItem>)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="InterviewOutcome">Phase Outcome:</label>
+                            <select id="InterviewOutcome" name="InterviewOutcome" class="form-control">
+                                <option value="">-- Select Outcome --</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-control-label">Comment</label>
+                            <textarea class="form-control" rows="5" name="comment" placeholder="Write comments here!"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary btn-sm">
+                            <i class="fa fa-dot-circle-o"></i> Submit
+                        </button>
+                    </div>
+
+                    <a href="@Url.Action("Index", "Home")" class="btn btn-secondary mb-3">Back to Home</a>
+                </div>
+            }
+        }
+        else if (Model.InterviewerLevel == "Interview Phase Completed")
+        {
+            <div style="border: 2px solid #28a745; background-color: #d4edda; color: #155724; padding: 10px; border-radius: 5px; display: flex; align-items: center; gap: 10px;">
+                ✅ <strong>Interview Phase Completed</strong>
+            </div>
+        }
+
+        <script>
+            // JavaScript to prevent form submission if Phase Status or Phase Outcome is not selected
+            document.getElementById('updateInterviewForm').onsubmit = function (e) {
+                var phaseStatus = document.getElementById('interviewStatus').value;
+                var interviewOutcome = document.getElementById('InterviewOutcome').value;
+
+                if (!phaseStatus || !interviewOutcome) {
+                    e.preventDefault();  // Prevent form submission
+                    alert('Please select both Phase Status and Phase Outcome before submitting.');
+                }
+            };
+        </script>
+
+
+
+
+
+    </div>
+
+
+    <!-- Success Message Alert -->
+    <div id="successMessage" class="alert alert-success alert-dismissible fade show" role="alert" style="display: none;">
+        Action completed successfully!
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+            var visitLevel = document.querySelector("input[name='VisitLevel']").value;
+            if (visitLevel === "Physical Visits Completed") {
+                document.getElementById("physicalAttemptForm").style.display = "none";
+            }
+        });
+
+        function showSuccessMessage(event) {
+            event.preventDefault(); // Prevent immediate form submission
+
+            // Show success message
+            document.getElementById("successMessage").style.display = "block";
+
+            // Hide success message after 3 seconds
+            setTimeout(function () {
+                document.getElementById("successMessage").style.display = "none";
+            }, 10000);
+
+            // Submit the form after a slight delay (optional)
+            setTimeout(() => {
+                event.target.closest("form").submit();
+            }, 500);
+        }
+
+    </script>
+
+
+
+    @*Index*@
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive m-b-40">
+                <h2>Agent Activity</h2>
+                <table id="HistoryTable" class="table table-borderless table-data3 display" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Date Actioned</th>
+                            <th>Status</th>
+                            <th>SCreening Status</th>
+                            <th>Interview Status</th>
+                            <th>Phase</th>
+                            <th>Interviewer</th>
+                            <th>Contacts</th>
+                            <th>Comments</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (ViewBag.history != null)
+                        {
+                            foreach (var item in ViewBag.history)
+                            {
+                                <tr>
+                                    <td>@item.DateAdded</td>
+                                    <td>@(item.lutStatu != null ? item.lutStatu.Status : "N/A")</td>
+                                    <td>@ViewBag.PhaseStatus</td>
+                                    <td>@ViewBag.interviewStatuss</td>  
+                                    <td>@(item.Phase)</td>
+                                    <td>@(item.tblAgent != null ? item.tblAgent.Name : "N/A")</td>
+                                    <td>@item.Contacts</td>
+                                    <td>@item.Comments</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive m-b-40">
+                <h2>Phase Statuses</h2>
+                <table id="HistoryStatus"class="table table-borderless table-data3 display" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Screening Status</th>
+                            <th>Screening Outcome</th>
+                            <th>Interview Status</th>
+                            <th>Interview Outcome</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@ViewBag.PhaseStatus</td>
+                            <td>@ViewBag.PhaseOutcome</td>
+                            <td>@ViewBag.InterviewStatuss</td>
+                            <td>@ViewBag.InterviewOutcome</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+
+    <br />
+    <div>
+        <button onclick="location.href='@Url.Action("Index", "Home")'" class="btn btn-primary">
+            BACK
+        </button>
+
+    </div>
+    <script>
+        $(document).ready(function () {
+            $('#HistoryTable').DataTable({
+                "pageLength": 5,
+                "lengthChange": false,
+                "ordering": false,
+                "info": false
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('#HistoryStatus').DataTable({
+                "pageLength": 5,
+                "lengthChange": false,
+                "ordering": false,
+                "info": false
+            });
+        });
+    </script>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+    $(document).ready(function () {
+        $("#interviewStatus").change(function () {
+            var groupId = $(this).val(); // Get selected GroupID
+
+            if (groupId) {
+                $.ajax({
+                    url: '@Url.Action("GetOutcomesByGroupID", "Home")', // Call controller method
+                    type: 'GET',
+                    data: { groupId: groupId },
+                    success: function (data) {
+                        var outcomeDropdown = $("#InterviewOutcome");
+                        outcomeDropdown.empty();
+                        outcomeDropdown.append('<option value="">-- Select Outcome --</option>');
+
+                        $.each(data, function (index, item) {
+                            outcomeDropdown.append($('<option>', {
+                                value: item.Value,
+                                text: item.Text
+                            }));
+                        });
+                    }
+                });
+            } else {
+                $("#InterviewOutcome").empty().append('<option value="">-- Select Outcome --</option>');
+            }
+        });
+    });
+    </script>
+
+
+    @Html.HiddenFor(m => m.RespondentID, new { @name = "respondentId" })
+
+</body>
+</html>
+

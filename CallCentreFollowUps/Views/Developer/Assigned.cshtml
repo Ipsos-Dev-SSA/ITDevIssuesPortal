@@ -1,0 +1,253 @@
+﻿@model IEnumerable<CallCentreFollowUps.Models.Issue>
+
+@{
+    ViewBag.Title = "Assigned Issues";
+    Layout = "~/Views/Shared/_LayoutPayroll.cshtml";
+}
+
+<link href="~/Content/css/Picturecss.css" rel="stylesheet" />
+<img src="~/Content/Images/IssuesLog.png" alt="Change Management Banner" class="portal-image" />
+<h2 class="mb-4 text-center" style="font-size: 32px; color: #007bff; font-weight: bold; text-transform: uppercase; border-bottom: 2px solid #007bff; padding-bottom: 10px;">
+    Assigned Issues
+</h2>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger text-center">@TempData["Error"]</div>
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success text-center">@TempData["Success"]</div>
+}
+
+<table id="assignedIssuesTable" class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Status</th>
+            <th>Submitted By</th>
+            <th>Updated On</th>
+            <th>Comment</th>
+            <th>Completion Date</th>
+            <th>Attachment</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <!-- Main issue rows -->
+    <tbody>
+        @if (!Model.Any())
+        {
+            <tr>
+                <td colspan="8" class="text-center">No assigned issues found.</td>
+            </tr>
+        }
+        else
+        {
+            foreach (var item in Model)
+            {
+                <tr data-issueid="@item.IssueId">
+                    <td>@item.Title</td>
+                    <td>@(item.Status?.Name ?? "Unknown")</td>
+                    <td>@item.SubmittedBy</td>
+                    <td>@(item.UpdatedDate?.ToString("yyyy-MM-dd HH:mm") ?? "N/A")</td>
+                    <td>@item.Comment</td>
+                    <td>@(item.CompletionDate?.ToString("yyyy-MM-dd") ?? "")</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.AttachmentPath))
+                {
+                    var files = item.AttachmentPath.Split(',');
+                    foreach (var file in files)
+                    {
+                        var fileName = System.IO.Path.GetFileName(file);
+                        <div>
+                            <a href="@Url.Content("~" + file.Trim())" target="_blank" class="btn btn-link p-0">
+                                📎 @fileName
+                            </a>
+                        </div>
+                    }
+                }
+                        else
+                        {
+                            <span class="text-muted">No Files</span>
+                        }
+                    </td>
+                    <td>
+                        <div class="d-flex gap-2">
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Update Status
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#statusModal" data-id="@item.IssueId" data-status="InProgress">
+                                            In Progress
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#statusModal" data-id="@item.IssueId" data-status="Completed">
+                                            Completed
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <button class="btn btn-sm btn-info view-history-btn" type="button" data-issueid="@item.IssueId">
+                                View History
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+
+    <!-- Separate tbody for the collapsible history rows -->
+    <tbody id="historyRowsContainer">
+        @foreach (var item in Model)
+        {
+            var history = ((List<CallCentreFollowUps.Models.IssueHistory>)ViewBag.IssueHistory)?
+                                .Where(h => h.IssueId == item.IssueId)
+                                .OrderByDescending(h => h.ChangeDate)
+                                .ToList()
+                              ?? new List<CallCentreFollowUps.Models.IssueHistory>();
+
+            <tr class="history-row bg-light" data-issueid="@item.IssueId" style="display:none;">
+                <td colspan="8" class="p-3">
+
+                    <h5>Issue History for: <span class="text-primary">@item.Title</span></h5>
+                    <table class="table table-sm table-bordered mb-0 history-table" id="historyTable_@item.IssueId">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Status</th>
+                                <th>Changed By</th>
+                                <th>Date</th>
+                                <th>Comments</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (history.Any())
+                            {
+                                int i = 1;
+                                foreach (var h in history)
+                                {
+                                    <tr>
+                                        <td>@i</td>
+                                        <td>@h.StatusName</td>
+                                        <td>@h.ChangedBy</td>
+                                        <td>@h.ChangeDate.ToString("yyyy-MM-dd HH:mm")</td>
+                                        <td>@h.Comments</td>
+                                    </tr>
+                                    i++;
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted">No history available for this issue.</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        @using (Html.BeginForm("UpdateStatusWithComment", "Developer", FormMethod.Post))
+        {
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="statusModalLabel">Update Issue Status</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <input type="hidden" id="issueId" name="issueId" />
+                    <input type="hidden" id="newStatus" name="newStatus" />
+
+                    <div class="form-group">
+                        <label for="comment">Comment</label>
+                        <textarea class="form-control" id="comment" name="comment" rows="4"></textarea>
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <label for="completionDate">Completion Date</label>
+                        <input type="date" class="form-control" id="completionDate" name="completionDate" />
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Submit</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#assignedIssuesTable').DataTable({
+                pageLength: 5,
+                lengthChange: false,
+                searching: true,
+                language: {
+                    search: "Filter records:"
+                },
+                // Disable sorting and searching on history rows by excluding them via rowCallback
+                "rowCallback": function (row, data, index) {
+                    if ($(row).hasClass('history-row')) {
+                        $(row).hide(); // Keep hidden initially
+                    }
+                }
+            });
+
+            // Status modal
+            $('#statusModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var issueId = button.data('id');
+                var status = button.data('status');
+                var modal = $(this);
+                modal.find('#issueId').val(issueId);
+                modal.find('#newStatus').val(status);
+                modal.find('#comment').val('');
+                modal.find('#completionDate').val('');
+            });
+
+            // Toggle history rows
+            $('.view-history-btn').click(function () {
+                var issueId = $(this).data('issueid');
+                var historyRow = $('.history-row[data-issueid="' + issueId + '"]');
+
+                // Hide all other history rows
+                $('.history-row').not(historyRow).hide();
+
+                // Toggle the clicked one
+                historyRow.toggle();
+            });
+            // Initialize all history tables
+            $('.history-table').each(function () {
+                $(this).DataTable({
+                    pageLength: 5,
+                    lengthChange: false,
+                    searching: false,
+                    ordering: false,
+                    info: false
+                });
+            });
+
+        });
+    </script>
+}

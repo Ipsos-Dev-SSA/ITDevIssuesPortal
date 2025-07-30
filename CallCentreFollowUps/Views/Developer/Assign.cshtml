@@ -1,0 +1,8 @@
+@model CallCentreFollowUps.Models.Issue
+<h2>Assign Issue</h2>
+@using (Html.BeginForm("Assign", "Cx", FormMethod.Post)) {
+@Html.HiddenFor(m => m.IssueId)
+<label>Assign to Developer</label>
+@Html.DropDownList("developerUserId", null, "Select Developer")
+<input type="submit" value="Assign" />
+}

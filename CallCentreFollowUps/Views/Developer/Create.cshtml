@@ -1,0 +1,15 @@
+@model CallCentreFollowUps.Models.Issue
+<h2>Create Issue</h2>
+@using (Html.BeginForm()) {
+@Html.AntiForgeryToken()
+<div>
+@Html.LabelFor(m => m.Title)
+@Html.TextBoxFor(m => m.Title)
+@Html.LabelFor(m => m.Description)
+@Html.TextAreaFor(m => m.Description)
+@Html.LabelFor(m => m.Priority)
+@Html.TextBoxFor(m => m.Priority)
+@Html.DropDownList("SubmittedBy", null, "Select User")
+<input type="submit" value="Submit" />
+</div>
+}

@@ -1,0 +1,52 @@
+﻿@model IEnumerable<CallCentreFollowUps.Models.IssueHistory>
+
+@{
+    ViewBag.Title = "Issue History Log";
+    Layout = "~/Views/Shared/_LayoutPayroll.cshtml";
+}
+
+<h2>Top 1,000 Issue History Logs</h2>
+
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
+
+<!-- Your Table -->
+<table id="historyTable" class="display nowrap table table-bordered" style="width:100%">
+    <thead>
+        <tr>
+            <th>History ID</th>
+            <th>Issue ID</th>
+            <th>Status ID</th>
+            <th>Changed By</th>
+            <th>Change Date</th>
+            <th>Comments</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.HistoryId</td>
+                <td>@item.IssueId</td>
+                <td>@item.StatusId</td>
+                <td>@item.ChangedBy</td>
+                <td>@item.ChangeDate.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@item.Comments</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- jQuery (must come first) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#historyTable').DataTable({
+            pageLength: 10,
+            responsive: true
+        });
+    });
+</script>

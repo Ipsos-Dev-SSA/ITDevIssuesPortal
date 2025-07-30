@@ -1,0 +1,33 @@
+﻿@model CallCentreFollowUps.Models.tblRespondent
+
+@{
+    ViewBag.Title = "Upload iField File";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading text-center">
+        <h4>Upload iField File</h4>
+    </div>
+
+    <div class="panel-body">
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success">@TempData["Success"]</div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger">@TempData["Error"]</div>
+        }
+
+        <form id="uploadForm" method="post" enctype="multipart/form-data" action="@Url.Action("ImportExcel", "Admin")">
+            <div class="form-group">
+                <label for="fileUpload">Upload Excel File:</label>
+                <input type="file" id="fileUpload" name="file" class="form-control" required />
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                <i class="glyphicon glyphicon-upload"></i> Upload File
+            </button>
+        </form>
+    </div>
+</div>

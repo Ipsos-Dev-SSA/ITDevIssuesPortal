@@ -1,0 +1,309 @@
+﻿@model IEnumerable<CallCentreFollowUps.Models.RespondentViewModel>
+
+@{
+    ViewBag.Title = "Respondent List";
+}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Include necessary DataTable CSS and JS -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.8/js/jquery.dataTables.min.js" defer="defer"></script>
+<link href="~/Content/datatables.min.css" />
+<script src="~/Scripts/datatables.min.js"></script>
+<link href="~/Content/Site.css" />
+<link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+<!-- Include DataTables & jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+
+<h2 class="interview-list-title">Statistics and Reports</h2>
+<br />
+<!-- Displaying Case Summary Statistics -->
+<div class="row">
+    <!-- Displaying Pie Chart Next to the Table -->
+    <div class="col-md-6">
+        <h4>Case Summary Pie Chart in (%)</h4>
+        <!-- Set smaller width and height for the chart -->
+        <canvas id="caseSummaryChart" class="chart"></canvas>
+    </div>
+
+    <div class="col-md-6">
+        <h4 style="font-weight: bold;">Case Summary</h4>
+        <table class="table" border="1">
+            <thead>
+                <tr>
+                    <th style="font-weight: bold;">Category</th>
+                    <th style="font-weight: bold;">Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="font-weight: bold;">Completed Cases</td>
+                    <td style="font-weight: bold;">@ViewBag.CaseSummary.CompletedCases</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Appointment Cases</td>
+                    <td style="font-weight: bold;">@ViewBag.CaseSummary.AppointmentCases</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Refusal Cases</td>
+                    <td style="font-weight: bold;">@ViewBag.CaseSummary.RefusalCases</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Out of Target Cases</td>
+                    <td style="font-weight: bold;">@ViewBag.CaseSummary.OutOfTargetCases</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Ineligible Cases</td>
+                    <td style="font-weight: bold;">@ViewBag.CaseSummary.IneligibleCases</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Unobtainable Cases</td>
+                    <td style="font-weight: bold;">@ViewBag.CaseSummary.UnobtainableCases</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+
+<br />
+
+<!-- Interview List Table -->
+<div>
+    <h4 class="interview-list-title">Interview List</h4>
+
+    <!-- Filter Dropdowns -->
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <label>Screening Status:</label>
+            <select id="filterPhaseStatus" class="form-control">
+                <option value="">All</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label>Screening Outcome:</label>
+            <select id="filterPhaseOutcome" class="form-control">
+                <option value="">All</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label>Interview Status:</label>
+            <select id="filterInterviewStatus" class="form-control">
+                <option value="">All</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label>Interview Outcome:</label>
+            <select id="filterInterviewOutcome" class="form-control">
+                <option value="">All</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Respondent Table -->
+    <table id="respondentTable" class="table table-sm table-bordered table-hover">
+        <thead class="thead-light">
+            <tr>
+                <th>Respondent ID</th>
+                <th>Interview ID</th>
+                <th>Cell Description</th>
+                <th>Technical ID</th>
+                <th>Date Added</th>
+                <th>Screening Level</th>
+                <th>Interviewer Level</th>
+                <th hidden>Status</th>
+                <th>Screening Status</th>
+                <th>Screening Outcome</th>
+                <th>Interview Status</th>
+                <th>Interview Outcome</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var respondent in ViewBag.RespondentDetails)
+            {
+                <tr>
+                    <td>@respondent.RespondentID</td>
+                    <td>@respondent.Resp_Surname</td>
+                    <td>@respondent.Resp_FirstName</td>
+                    <td>@respondent.PhoneNumber</td>
+                    <td>@respondent.DateAdded</td>
+                    <td>@respondent.ScreeningLevel</td>
+                    <td>@respondent.InterviewerLevel</td>
+                    <td hidden>@respondent.StatusID</td>
+                    <td>@respondent.PhaseStatus</td>
+                    <td>@respondent.PhaseOutcome</td>
+                    <td>@respondent.interviewStatus</td>
+                    <td>@respondent.InterviewOutcome</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
+
+<a href="@Url.Action("Index", "Home")" class="btn btn-primary">Back</a>
+
+<style>
+    /* Custom Styles for Compact Table */
+    table {
+        font-size: 0.8rem; /* Smaller font size */
+        width: 100%; /* Table width */
+    }
+
+    th, td {
+        padding: 0.25rem; /* Reduce padding for compactness */
+        text-align: center; /* Center text for better alignment */
+    }
+
+    thead th {
+        font-size: 0.85rem; /* Slightly smaller header font size */
+    }
+
+    /* Custom Styles for Interview List Title */
+    .interview-list-title {
+        font-size: 1.5rem; /* Larger font size */
+        font-weight: 600; /* Semi-bold weight */
+        color: #333; /* Dark color for readability */
+        letter-spacing: 1px; /* Slight letter spacing for modern look */
+        margin-bottom: 15px; /* Bottom margin for spacing from table */
+        text-transform: uppercase; /* Uppercase text for emphasis */
+        border-bottom: 2px solid #007bff; /* Underline with a modern color */
+        padding-bottom: 5px; /* Padding to give space under the text */
+        font-family: 'Segoe UI', Tahoma, Geneva, sans-serif; /* Modern sans-serif font */
+    }
+
+    .chart {
+        height: 450px;
+        width: 450px;
+    }
+</style>
+
+
+
+<script>
+    $(document).ready(function () {
+        var table = $('#respondentTable').DataTable({
+            "pageLength": 3, // Default rows per page
+            "paging": true,
+            "searching": true,
+            "ordering": true,
+            "info": true
+        });
+
+        // Populate dropdown filters dynamically
+        function populateFilter(columnIndex, filterId) {
+            var uniqueValues = new Set();
+
+            table.column(columnIndex).data().each(function (value) {
+                if (value.trim() !== "") {
+                    uniqueValues.add(value.trim());
+                }
+            });
+
+            uniqueValues.forEach(function (value) {
+                $(filterId).append('<option value="' + value + '">' + value + '</option>');
+            });
+        }
+
+        populateFilter(8, "#filterPhaseStatus");
+        populateFilter(9, "#filterPhaseOutcome");
+        populateFilter(10, "#filterInterviewStatus");
+        populateFilter(11, "#filterInterviewOutcome");
+
+        // Filter function
+        function applyFilter(columnIndex, filterId) {
+            $(filterId).on("change", function () {
+                var selectedValue = $(this).val();
+                table.column(columnIndex).search(selectedValue).draw();
+            });
+        }
+
+        applyFilter(8, "#filterPhaseStatus");
+        applyFilter(9, "#filterPhaseOutcome");
+        applyFilter(10, "#filterInterviewStatus");
+        applyFilter(11, "#filterInterviewOutcome");
+
+        // Pie chart data from ViewBag
+        var completedCases = @ViewBag.CaseSummary.CompletedCases;
+        var appointmentCases = @ViewBag.CaseSummary.AppointmentCases;
+        var refusalCases = @ViewBag.CaseSummary.RefusalCases;
+        var outOfTargetCases = @ViewBag.CaseSummary.OutOfTargetCases;
+        var ineligibleCases = @ViewBag.CaseSummary.IneligibleCases;
+        var unobtainableCases = @ViewBag.CaseSummary.UnobtainableCases;
+
+        // Calculate the total number of cases
+        var totalCases = completedCases + appointmentCases + refusalCases + outOfTargetCases + ineligibleCases + unobtainableCases;
+
+        // Calculate the percentages
+        var completedCasesPercentage = (completedCases / totalCases) * 100;
+        var appointmentCasesPercentage = (appointmentCases / totalCases) * 100;
+        var refusalCasesPercentage = (refusalCases / totalCases) * 100;
+        var outOfTargetCasesPercentage = (outOfTargetCases / totalCases) * 100;
+        var ineligibleCasesPercentage = (ineligibleCases / totalCases) * 100;
+        var unobtainableCasesPercentage = (unobtainableCases / totalCases) * 100;
+
+        // Pie chart labels and data
+        var ctx = document.getElementById('caseSummaryChart').getContext('2d');
+        var caseSummaryChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: [
+                    'Completed Cases',
+                    'Appointment Cases',
+                    'Refusal Cases',
+                    'Out of Target Cases',
+                    'Ineligible Cases',
+                    'Unobtainable Cases'
+                ],
+                datasets: [{
+                    label: 'Case Summary',
+                    data: [
+                        completedCasesPercentage,
+                        appointmentCasesPercentage,
+                        refusalCasesPercentage,
+                        outOfTargetCasesPercentage,
+                        ineligibleCasesPercentage,
+                        unobtainableCasesPercentage
+                    ],
+                    backgroundColor: [
+                        '#36A2EB', // Completed Cases
+                        '#FF9F40', // Appointment Cases
+                        '#FF6384', // Refusal Cases
+                        '#4BC0C0', // Out of Target Cases
+                        '#FFCD56', // Ineligible Cases
+                        '#FF5733'  // Unobtainable Cases
+                    ],
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                // Format the tooltip with percentage sign
+                                return tooltipItem.raw.toFixed(2) + "%";
+                            }
+                        }
+                    },
+                    datalabels: {
+                        formatter: function (value) {
+                            // Format the data labels with percentage sign
+                            return value.toFixed(2) + "%";
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+

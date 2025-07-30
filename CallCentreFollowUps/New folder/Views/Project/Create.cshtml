@@ -1,0 +1,71 @@
+﻿@model CallCentreFollowUps.Models.Project
+
+@{
+    ViewBag.Title = "Create New Project";
+}
+@{
+    Layout = "~/Views/Shared/_LayoutPayroll.cshtml"; <!-- Reference the layout file here -->
+}
+
+<h2 class="custom-heading">Create New Project</h2>
+
+@using (Html.BeginForm("Create", "Project", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <div class="row">
+            <!-- First Column -->
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.ProjectName, htmlAttributes: new { @class = "control-label" })
+                    @Html.TextBoxFor(m => m.ProjectName, new { @class = "form-control" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.PayRate, htmlAttributes: new { @class = "control-label" })
+                    @Html.TextBoxFor(m => m.PayRate, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <!-- Second Column -->
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.ProjectNumber, htmlAttributes: new { @class = "control-label" })
+                    @Html.TextBoxFor(m => m.ProjectNumber, new { @class = "form-control" })
+                </div>
+
+                @*<div class="form-group">
+                        @Html.LabelFor(m => m.SupervisionFee, htmlAttributes: new { @class = "control-label" })
+                        @Html.TextBoxFor(m => m.SupervisionFee, new { @class = "form-control" })
+                    </div>*@
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <button type="submit" class="btn btn-primary">Create</button>
+            </div>
+            <div class="form-group col-md-6">
+
+                @Html.ActionLink("Back to List", "Index")
+            </div>
+
+        </div>
+
+    </div>
+}
+
+<style>
+    /* Custom styles for the heading */
+    .custom-heading {
+        font-size: 2.5rem; /* Larger font size */
+        color: #004085; /* Custom blue color */
+        text-align: center; /* Center alignment */
+        font-weight: bold; /* Make the text bold */
+        padding: 15px; /* Add padding for spacing */
+        background-color: #f8f9fa; /* Light background color */
+        border-radius: 5px; /* Rounded corners */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    }
+</style>

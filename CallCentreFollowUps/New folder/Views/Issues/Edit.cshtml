@@ -1,0 +1,64 @@
+﻿@model CallCentreFollowUps.Models.Issue
+
+@{
+    ViewBag.Title = "Edit Issue";
+    Layout = "~/Views/Shared/_LayoutPayroll.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg rounded-3">
+        <div class="card-header bg-warning text-dark">
+            <h4 class="mb-0">Edit Issue</h4>
+        </div>
+        <div class="card-body">
+            @using (Html.BeginForm("Edit", "Issues", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(m => m.IssueId)
+
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.Title, "Issue Name", htmlAttributes: new { @class = "form-label" })
+                    @Html.TextBoxFor(m => m.Title, new { @class = "form-control", placeholder = "Enter issue name" })
+                    <div class="text-danger small">@Html.ValidationMessageFor(m => m.Title)</div>
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.CategoryId, "Issue Category", htmlAttributes: new { @class = "form-label" })
+                    @Html.DropDownListFor(m => m.CategoryId, (SelectList)ViewBag.CategoryId, "-- Select Category --", new { @class = "form-select" })
+                    <div class="text-danger small">@Html.ValidationMessageFor(m => m.CategoryId)</div>
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.Description, htmlAttributes: new { @class = "form-label" })
+                    @Html.TextAreaFor(m => m.Description, new { @class = "form-control", rows = 4, placeholder = "Describe the issue in detail..." })
+                    <div class="text-danger small">@Html.ValidationMessageFor(m => m.Description)</div>
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.Priority, htmlAttributes: new { @class = "form-label" })
+                    @Html.TextBoxFor(m => m.Priority, new { @class = "form-control", type = "number", min = "1", max = "5", placeholder = "1 (Low) to 5 (High)" })
+                    <div class="text-danger small">@Html.ValidationMessageFor(m => m.Priority)</div>
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.StatusId, "Status", htmlAttributes: new { @class = "form-label" })
+                    @Html.DropDownListFor(m => m.StatusId, (SelectList)ViewBag.StatusId, "-- Select Status --", new { @class = "form-select" })
+                    <div class="text-danger small">@Html.ValidationMessageFor(m => m.StatusId)</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="attachments" class="form-label">Update Attachments (optional)</label>
+                    <input type="file" name="attachments" multiple class="form-control" />
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-success btn-lg">Update Issue</button>
+                </div>
+
+                <div class="text-center">
+                    <a href="@Url.Action("Index", "Issues")" class="btn btn-secondary mt-3">← Back to List</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>

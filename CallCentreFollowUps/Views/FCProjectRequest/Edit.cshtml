@@ -1,0 +1,96 @@
+﻿@model CallCentreFollowUps.Models.FCProjectRequest
+
+@{
+    ViewBag.Title = "Edit Project Request";
+}
+@{
+    Layout = "~/Views/Shared/_LayoutPayroll.cshtml"; <!-- Reference the layout file here -->
+}
+<h2 class="custom-heading">Edit Project Request</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    @Html.HiddenFor(model => model.RequestID)
+
+    <!-- First row with Supervisor and Project -->
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(model => model.SupervisorID, "Supervisor Name")
+            @Html.DropDownListFor(model => model.SupervisorID, ViewBag.Supervisors as SelectList, "-- Select Supervisor --", new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.SupervisorID)
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(model => model.ProjectID, "Project Name")
+            @Html.DropDownListFor(model => model.ProjectID, (SelectList)ViewBag.Projects, "Select Project", new { @class = "form-control", id = "ProjectID" })
+            @Html.ValidationMessageFor(model => model.ProjectID)
+        </div>
+    </div>
+
+    <!-- Second row with Number of Interviews and Date Requested -->
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(model => model.NumberOfInterviews, "Number of Interviews")
+            @Html.TextBoxFor(model => model.NumberOfInterviews, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.NumberOfInterviews)
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(model => model.DateRequested, "Date Requested")
+            @Html.TextBoxFor(model => model.DateRequested, new { @class = "form-control", type = "date" })
+            @Html.ValidationMessageFor(model => model.DateRequested)
+        </div>
+    </div>
+
+    <!-- Third row with Comments (Full width) -->
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            @Html.LabelFor(model => model.Comments)
+            @Html.TextAreaFor(model => model.Comments, new { @class = "form-control", rows = 6 })
+            @Html.ValidationMessageFor(model => model.Comments)
+        </div>
+    </div>
+
+    <!-- Fourth row with Submit and Back button -->
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <input type="submit" value="Save Changes" class="btn btn-primary" />
+        </div>
+        <br />
+        <div class="form-group col-md-6">
+            @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-secondary" })
+        </div>
+    </div>
+}
+
+<style>
+    .custom-heading {
+        font-size: 2.5rem;
+        color: #004085;
+        text-align: center;
+        font-weight: bold;
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-radius: 5px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#ProjectID').change(function () {
+            var selectedOption = $(this).find(':selected');
+            var projectNumber = selectedOption.closest('optgroup').attr('label');
+
+            if (projectNumber) {
+                $('#ProjectNumber').val(projectNumber);
+            } else {
+                $('#ProjectNumber').val("");
+            }
+        });
+    });
+</script>
