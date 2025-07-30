@@ -16,7 +16,7 @@
                 @Html.AntiForgeryToken()
 
                 <div class="mb-3">
-                    @Html.LabelFor(m => m.Title, "Issue Name", htmlAttributes: new { @class = "form-label" })
+                    @Html.LabelFor(m => m.Title, "Issue Title", htmlAttributes: new { @class = "form-label" })
                     @Html.TextBoxFor(m => m.Title, new { @class = "form-control", placeholder = "Enter issue name" })
                     <div class="text-danger small">@Html.ValidationMessageFor(m => m.Title)</div>
                 </div>
