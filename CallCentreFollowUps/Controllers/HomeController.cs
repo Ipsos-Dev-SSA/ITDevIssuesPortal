@@ -33,19 +33,31 @@ namespace CallCentreFollowUps.Controllers
         public bool CheckIn4 { get; private set; }
         public object CheckInDate { get; private set; }
         //public object CheckInLevel { get; private set; }
-
         public ActionResult Index()
         {
-            //ViewBag.CurrentUserFullName = CommonMethods.CurrentUserFullName;
             var strUserDetails = Request.LogonUserIdentity.Name;
             var CurrentUserName = strUserDetails.Split('\\')[1].Split(' ')[0];
             CurrentUserName = CurrentUserName.Substring(0, 1).ToUpper() + CurrentUserName.Substring(1);
             ViewBag.UserName = CurrentUserName;
 
+            using (var db = new CallCentreTrackerEntities1())
+            {
+                var userRoles = from u in db.aspnet_Users
+                                join ur in db.vw_aspnet_UsersInRoles on u.UserId equals ur.UserId
+                                join r in db.aspnet_Roles on ur.RoleId equals r.RoleId
+                                where u.UserName.ToLower() == CurrentUserName.ToLower()
+                                select r.RoleName;
+
+                if (userRoles!=null)
+                {
+                    return RedirectToAction("Index", "Cx");
+                }
+            }
+
             return RedirectToAction("Index", "Issues");
-
-
         }
+
+
 
     }
 }

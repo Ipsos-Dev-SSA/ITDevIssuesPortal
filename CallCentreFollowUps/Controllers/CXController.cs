@@ -11,7 +11,7 @@ using System.Web;
 
 namespace CallCentreFollowUps.Controllers
 {
-    [Authorize(Roles = "CX")]
+   
     public class CxController : Controller
     {
         private CallCentreTrackerEntities1 db = new CallCentreTrackerEntities1();
