@@ -18,7 +18,12 @@ namespace CallCentreFollowUps.Controllers
 
         public ActionResult Index()
         {
-              var issues = db.Issuess
+
+            var strUserDetails = Request.LogonUserIdentity.Name;
+            var CurrentUserName = strUserDetails.Split('\\')[1].Split(' ')[0];
+            CurrentUserName = CurrentUserName.Substring(0, 1).ToUpper() + CurrentUserName.Substring(1);
+            ViewBag.UserName = CurrentUserName; 
+            var issues = db.Issuess
               .Include(i => i.Status)
               .Include(i => i.aspnet_Users)
               .Where(i => i.Status.Name == "Completed"
@@ -143,7 +148,7 @@ namespace CallCentreFollowUps.Controllers
                 IssueId = issue.IssueId,
                 StatusId = newStatusId,
                 StatusName = status.Name,
-                ChangedBy = user.UserName,
+                ChangedBy = ViewBag.CurrentUserName,
                 ChangeDate = DateTime.Now,
                 Comments = comment
             });
